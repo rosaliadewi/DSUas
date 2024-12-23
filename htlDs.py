@@ -13,12 +13,9 @@ st.write("""
     melakukan prediksi apakah reservasi akan dibatalkan atau tidak berdasarkan data yang ada.
 """)
 
-# Lokasi file Excel yang akan dibaca
-data = pd.read_excel('Hotel-Reservation-Dataset.xlsx')
-
 try:
     # Membaca data dari file Excel
-    df = pd.read_excel(data)
+    df = pd.read_excel('Hotel-Reservation-Dataset.xlsx')
 
     # Cek apakah kolom 'booking_status' ada di data
     if 'booking_status' not in df.columns:
