@@ -7,12 +7,6 @@ from sklearn.ensemble import RandomForestClassifier
 # Judul aplikasi
 st.title('Model Prediksi Pembatalan Reservasi Hotel')
 
-# Deskripsi aplikasi
-st.write("""
-    Aplikasi ini membaca data reservasi hotel dari file Excel lokal dan 
-    melakukan prediksi apakah reservasi akan dibatalkan atau tidak berdasarkan data yang ada.
-""")
-
 try:
     # Membaca data dari file Excel
     df = pd.read_excel('Hotel-Reservation-Dataset.xlsx')
