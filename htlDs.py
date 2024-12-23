@@ -14,11 +14,11 @@ st.write("""
 """)
 
 # Lokasi file Excel yang akan dibaca
-file_path = "C:/Users/INFINIX/Documents/Semester 5/HotelDs/Hotel-Reservation-Dataset.xlsx"
+data = pd.read_excel('Hotel-Reservation-Dataset.xlsx')
 
 try:
     # Membaca data dari file Excel
-    df = pd.read_excel(file_path)
+    df = pd.read_excel(data)
 
     # Cek apakah kolom 'booking_status' ada di data
     if 'booking_status' not in df.columns:
