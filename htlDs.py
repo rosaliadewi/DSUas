@@ -9,11 +9,11 @@ from sklearn.metrics import classification_report
 st.title('Model Prediksi Pembatalan Reservasi Hotel')
 
 # Lokasi file Excel
-file_path = 'C:/Users/INFINIX/Documents/Semester 5/HotelDs/Hotel_Reservation_Resampled_Undersampled.xlsx'
+data= 'Hotel_Reservation_Resampled_Undersampled.xlsx'
 
 try:
     # Membaca dataset
-    df = pd.read_excel(file_path)
+    df = pd.read_excel(data)
 
     # Periksa kolom target
     if 'booking_status' not in df.columns:
