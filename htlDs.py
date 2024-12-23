@@ -9,7 +9,7 @@ st.title('Model Prediksi Pembatalan Reservasi Hotel')
 
 try:
     # Membaca data dari file Excel
-    df = pd.read_excel('Hotel-Reservation-Dataset.xlsx')
+    df = pd.read_excel('Hotel-Reservation-Dataset.xlsx.xlsx')
 
    # Cek apakah kolom 'booking_status' ada di data
     if 'booking_status' not in df.columns:
