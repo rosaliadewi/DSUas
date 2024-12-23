@@ -11,7 +11,7 @@ try:
     # Membaca data dari file Excel
     df = pd.read_excel('Hotel-Reservation-Dataset.xlsx')
 
-    # Cek apakah kolom 'booking_status' ada di data
+   # Cek apakah kolom 'booking_status' ada di data
     if 'booking_status' not in df.columns:
         st.error("Kolom 'booking_status' tidak ditemukan dalam dataset. Pastikan dataset memiliki kolom tersebut.")
     else:
@@ -98,7 +98,7 @@ try:
                     pred_status = rf_model.predict(new_data)
 
                     # Menentukan hasil prediksi
-                    status = 'Canceled' if pred_status[0] == 1 else 'Confirmed'
+                    status = 'canceled' if pred_status[0] == 1 else 'not_canceled'
 
                     # Tambahkan hasil prediksi pada data baru
                     new_data['booking_status'] = status
