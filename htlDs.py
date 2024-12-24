@@ -51,71 +51,51 @@ try:
         )
         rf_model.fit(X_train, y_train)
 
-        # Evaluasi model (dihapus atau dikomentari)
+        # Hapus atau komentari bagian ini untuk tidak menampilkan evaluasi model
         # st.text("Evaluasi Model:")
         # st.text(classification_report(y_test, rf_model.predict(X_test)))
 
-        # Inisialisasi tabel data baru (dengan hasil prediksi)
-        if "new_data_with_inputs" not in st.session_state:
-            st.session_state.new_data_with_inputs = pd.DataFrame()
-
-        # Form untuk input data baru
-        with st.form("input_form", clear_on_submit=True):  # Menambahkan clear_on_submit=True
+        # Form untuk prediksi data baru
+        with st.form("prediction_form"):
             st.subheader("Masukkan Data Baru:")
-            no_of_adults = st.number_input("Jumlah Dewasa:", min_value=1, max_value=10, key="adults")
-            no_of_children = st.number_input("Jumlah Anak-anak:", min_value=0, max_value=10, key="children")
-            no_of_weekend_nights = st.number_input("Malam Akhir Pekan:", min_value=0, max_value=7, key="weekend_nights")
-            no_of_week_nights = st.number_input("Malam Mingguan:", min_value=0, max_value=7, key="week_nights")
-            type_of_meal_plan = st.selectbox("Paket Makanan:", df['type_of_meal_plan'].unique(), key="meal_plan")
-            room_type_reserved = st.selectbox("Jenis Kamar:", df['room_type_reserved'].unique(), key="room_type")
-            lead_time = st.number_input("Lead Time:", min_value=0, max_value=365, key="lead_time")
-            market_segment_type = st.selectbox("Segmen Pasar:", df['market_segment_type'].unique(), key="market_segment")
-            avg_price_per_room = st.number_input("Harga Rata-rata per Kamar:", min_value=0.0, key="avg_price")
+            no_of_adults = st.number_input("Jumlah Dewasa:", min_value=1, max_value=10)
+            no_of_children = st.number_input("Jumlah Anak-anak:", min_value=0, max_value=10)
+            no_of_weekend_nights = st.number_input("Malam Akhir Pekan:", min_value=0, max_value=7)
+            no_of_week_nights = st.number_input("Malam Mingguan:", min_value=0, max_value=7)
+            type_of_meal_plan = st.selectbox("Paket Makanan:", df['type_of_meal_plan'].unique())
+            room_type_reserved = st.selectbox("Jenis Kamar:", df['room_type_reserved'].unique())
+            lead_time = st.number_input("Lead Time:", min_value=0, max_value=365)
+            market_segment_type = st.selectbox("Segmen Pasar:", df['market_segment_type'].unique())
+            avg_price_per_room = st.number_input("Harga Rata-rata per Kamar:", min_value=0.0)
 
-            submitted = st.form_submit_button("Tambahkan dan Prediksi")
+            submitted = st.form_submit_button("Prediksi")
 
             if submitted:
-                # Simpan data input sesuai format asli
-                original_data = {
-                    "no_of_adults": no_of_adults,
-                    "no_of_children": no_of_children,
-                    "no_of_weekend_nights": no_of_weekend_nights,
-                    "no_of_week_nights": no_of_week_nights,
-                    "type_of_meal_plan": type_of_meal_plan,
-                    "room_type_reserved": room_type_reserved,
-                    "lead_time": lead_time,
-                    "market_segment_type": market_segment_type,
-                    "avg_price_per_room": avg_price_per_room
-                }
+                # Buat DataFrame baru untuk prediksi
+                new_data = pd.DataFrame({
+                    "no_of_adults": [no_of_adults],
+                    "no_of_children": [no_of_children],
+                    "no_of_weekend_nights": [no_of_weekend_nights],
+                    "no_of_week_nights": [no_of_week_nights],
+                    "type_of_meal_plan": [type_of_meal_plan],
+                    "room_type_reserved": [room_type_reserved],
+                    "lead_time": [lead_time],
+                    "market_segment_type": [market_segment_type],
+                    "avg_price_per_room": [avg_price_per_room]
+                })
 
-                # Buat DataFrame dari inputan pengguna
-                new_data = pd.DataFrame([original_data])
-
-                # Data untuk prediksi (diolah)
-                pred_data = new_data.copy()
+                # Encode kategori
                 for col in categorical_columns:
-                    pred_data[col] = label_encoders[col].transform(pred_data[col])
-                pred_data[numerical_columns] = scaler.transform(pred_data[numerical_columns])
+                    new_data[col] = label_encoders[col].transform(new_data[col])
+
+                # Scaling data baru
+                new_data[numerical_columns] = scaler.transform(new_data[numerical_columns])
 
                 # Prediksi
-                prediction = rf_model.predict(pred_data)
+                prediction = rf_model.predict(new_data)
                 result = label_encoder_target.inverse_transform(prediction)[0]
 
-                # Tambahkan hasil prediksi ke data input asli
-                original_data['booking_status'] = result
-                new_data_with_prediction = pd.DataFrame([original_data])
+                st.success(f"Hasil Prediksi: {result}")
 
-                # Simpan ke tabel session_state
-                st.session_state.new_data_with_inputs = pd.concat(
-                    [st.session_state.new_data_with_inputs, new_data_with_prediction],
-                    ignore_index=True
-                )
-
-                st.success("Data berhasil ditambahkan dan diprediksi!")
-
-        # Tampilkan tabel dengan data input asli dan hasil prediksi
-        st.subheader("Tabel Data Baru dengan Hasil Prediksi:")
-        st.write(st.session_state.new_data_with_inputs)
-
-except FileNotFoundError:
+except FileNotFoundError:   
     st.error(f"File '{file_path}' tidak ditemukan. Pastikan file berada di direktori yang benar.")
