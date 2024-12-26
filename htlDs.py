@@ -7,7 +7,11 @@ from sklearn.metrics import classification_report
 
 # Judul aplikasi
 st.title('Model Prediksi Pembatalan Reservasi Hotel')
-
+# Deskripsi aplikasi
+st.write("""
+    Aplikasi ini membaca data reservasi hotel dari file Excel lokal dan 
+    melakukan prediksi apakah reservasi akan dibatalkan atau tidak berdasarkan data yang ada.
+""")
 # Lokasi file Excel
 data= 'Hotel_Reservation_Resampled_Undersampled.xlsx'
 
